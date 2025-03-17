@@ -4,6 +4,7 @@ services:
     image: odoo:18.0
     depends_on:
       - postgres
+      - nginx-proxy-manager
     # expose:
     #   - "8069"
     ports:

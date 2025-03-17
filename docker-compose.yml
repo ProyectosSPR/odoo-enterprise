@@ -1,0 +1,63 @@
+services:
+  odoo-web:
+    container_name: odoo-web
+    image: odoo:18.0
+    depends_on:
+      - postgres
+    expose:
+      - "8069"
+    # ports:
+    #   - "8069:8069"
+    #   - "8072:8072"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons-extra:/mnt/extra-addons
+      - ./addons:/mnt/enterprise-addons
+    restart: always
+    entrypoint: "/usr/bin/odoo -c /etc/odoo/odoo.conf"
+
+
+  postgres:
+    image: postgres:17
+    container_name: postgres_db2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Sergio55
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    restart: always
+
+  nginx-proxy-manager:
+    container_name: nginx-proxy-manager
+    image: jc21/nginx-proxy-manager:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"    # HTTP
+      - "443:443"  # HTTPS
+      - "81:81"    # Panel de administración de NPM
+    volumes:
+      - nginx_data:/data
+      - nginx_letsencrypt:/etc/letsencrypt
+
+volumes:
+  odoo-web-data:
+  postgres_data:
+  pgadmin_data:
+  nginx_data:
+  nginx_letsencrypt:

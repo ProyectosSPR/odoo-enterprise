@@ -5,34 +5,27 @@ services:
     depends_on:
       - postgres
       - nginx-proxy-manager
-    # expose:
-    #   - "8069"
-    ports:
-      - "8069:8069"
-      - "8072:8072"	
+    expose:
+      - "8069"	
     volumes:
       - odoo-web-data:/var/lib/odoo
       - ./config:/etc/odoo
       - ./addons-extra:/mnt/extra-addons
       - ./addons:/mnt/enterprise-addons
     restart: always
-    entrypoint: "/usr/bin/odoo -c /etc/odoo/odoo.conf"
 
-
-  postgres:
+postgres:
     image: postgres:17
     container_name: postgres_db2
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Sergio55
       POSTGRES_DB: mydb
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
-  pgadmin:
+pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
@@ -44,7 +37,7 @@ services:
       - pgadmin_data:/var/lib/pgadmin
     restart: always
 
-  nginx-proxy-manager:
+nginx-proxy-manager:
     container_name: nginx-proxy-manager
     image: jc21/nginx-proxy-manager:latest
     restart: unless-stopped

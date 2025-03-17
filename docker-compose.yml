@@ -21,6 +21,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Sergio55
       POSTGRES_DB: mydb
+    expose:
+      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always

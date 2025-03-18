@@ -13,6 +13,7 @@ services:
       - ./addons-extra:/mnt/extra-addons
       - ./addons:/mnt/enterprise-addons
     restart: always
+    user: root
 
   postgres:
     image: postgres:17
